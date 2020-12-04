@@ -6,7 +6,7 @@ import common.Day
 fun main() {
     Day(n = 3) {
         answer {
-            traverse(lines, 3 to 1).last().second
+            traverse(lines, 3 to 1).last()
         }
         answer {
             val slopes = listOf(
@@ -16,8 +16,7 @@ fun main() {
                 7 to 1,
                 1 to 2
             )
-
-            slopes.map { slope -> traverse(lines, slope).last().second }
+            slopes.map { slope -> traverse(lines, slope).last() }
                 .fold(1L) { a, b -> a * b }
         }
     }
@@ -26,7 +25,7 @@ fun main() {
 private fun traverse(
     lines: List<String>,
     slope: Pair<Int, Int>
-): Sequence<Pair<Int, Int>> {
+): Sequence<Int> {
     val input = lines.joinToString("")
     val cols = lines.first().length
     return generateSequence(0 to 0) { (previous, trees) ->
@@ -38,5 +37,5 @@ private fun traverse(
             input[next] == '#' -> trees + 1
             else -> trees
         }
-    }
+    }.map { it.second }
 }

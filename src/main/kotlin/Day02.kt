@@ -11,7 +11,7 @@ fun main() {
 
                 val minMax = split[0].split('-')
                 val range = minMax[0].toInt()..minMax[1].toInt()
-                val letter = split[1].dropLast(1)[0]
+                val letter = split[1].first()
 
                 split[2].count { it == letter } in range
             }
@@ -22,7 +22,7 @@ fun main() {
 
                 val index = split[0].split('-')
                 val indices = listOf(index[0].toInt() - 1, index[1].toInt() - 1)
-                val letter = split[1].dropLast(1)[0]
+                val letter = split[1].first()
 
                 indices.count { split[2][it] == letter } == 1
             }

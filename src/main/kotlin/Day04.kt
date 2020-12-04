@@ -3,15 +3,18 @@ import common.Day
 // Answer #1: 213
 // Answer #2: 147
 
+private const val BLANK_LINE = "\n\n"
+private val SPACE_OR_NEWLINE = arrayOf(" ", "\n")
+
 fun main() {
     Day(n = 4) {
         answer {
-            joinedMultiLine.toPassports()
+            multiLine.toPassports()
                 .filterHasRequiredFields()
                 .count()
         }
         answer {
-            joinedMultiLine.toPassports()
+            multiLine.toPassports()
                 .filterHasRequiredFields()
                 .filterHasValidFields()
                 .count()
@@ -20,8 +23,8 @@ fun main() {
 }
 
 private fun String.toPassports() =
-    split("\n\n")
-        .map { p -> p.split(" ", "\n").map { it.split(":") } }
+    split(BLANK_LINE)
+        .map { p -> p.split(*SPACE_OR_NEWLINE).map { it.split(":") } }
         .map { p -> p.associateBy({it[0]}, {it[1]}) }
 
 private fun List<Map<String, String>>.filterHasRequiredFields() =
@@ -42,8 +45,7 @@ private fun List<Map<String, String>>.filterHasValidFields() =
                 "hcl" -> value.startsWith("#") && value.drop(1).toIntOrNull(radix = 16) != null
                 "ecl" -> value in setOf("amb", "blu", "brn", "gry", "grn", "hzl", "oth")
                 "pid" -> value.length == 9 && value.toIntOrNull() != null
-                "cid" -> true
-                else -> false
+                else -> "cid" == key
             }
         }
     }
