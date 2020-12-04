@@ -1,6 +1,7 @@
 package common
 
 import extension.toFloats
+import extension.toInts
 import java.io.File
 
 class Day(private val input: Input, block: Day.() -> Unit) {
@@ -22,6 +23,9 @@ class Day(private val input: Input, block: Day.() -> Unit) {
 
 class Input(val lines: List<String>) {
     val floats by lazy { lines.toFloats() }
+    val ints by lazy { lines.toInts() }
+    val joinedLine by lazy { lines.joinToString("") }
+    val joinedMultiLine by lazy { lines.joinToString("\n") }
 
     constructor(day: Int) : this(File("./assets/input-day-$day.txt"))
     constructor(file: File) : this(file.readLines())

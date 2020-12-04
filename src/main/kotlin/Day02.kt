@@ -21,7 +21,7 @@ fun main() {
                 val split = line.split(" ")
 
                 val index = split[0].split('-')
-                val indices = listOf(index[0].toInt().dec(), index[1].toInt().dec())
+                val indices = listOf(index[0].toInt() - 1, index[1].toInt() - 1)
                 val letter = split[1].dropLast(1)[0]
 
                 indices.count { split[2][it] == letter } == 1

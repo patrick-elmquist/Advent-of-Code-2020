@@ -3,17 +3,15 @@ import common.Day
 // Answer #1: 213
 // Answer #2: 147
 
-private val REQUIRED = setOf("byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid")
-
 fun main() {
     Day(n = 4) {
         answer {
-            lines.toPassports()
+            joinedMultiLine.toPassports()
                 .filterHasRequiredFields()
                 .count()
         }
         answer {
-            lines.toPassports()
+            joinedMultiLine.toPassports()
                 .filterHasRequiredFields()
                 .filterHasValidFields()
                 .count()
@@ -21,13 +19,13 @@ fun main() {
     }
 }
 
-private fun List<String>.toPassports() =
-    joinToString("\n").split("\n\n")
-        .map { passport -> passport.split(" ", "\n").map { it.split(":") } }
-        .map { passport -> passport.map { it[0] to it[1] }.toMap() }
+private fun String.toPassports() =
+    split("\n\n")
+        .map { p -> p.split(" ", "\n").map { it.split(":") } }
+        .map { p -> p.associateBy({it[0]}, {it[1]}) }
 
 private fun List<Map<String, String>>.filterHasRequiredFields() =
-    filter { passport -> REQUIRED.count { it in passport.keys } == REQUIRED.size }
+    filter { p -> listOf("byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid").all { it in p.keys } }
 
 private fun List<Map<String, String>>.filterHasValidFields() =
     filter { passport ->
