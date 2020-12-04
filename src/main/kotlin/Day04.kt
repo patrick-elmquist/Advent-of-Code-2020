@@ -25,7 +25,7 @@ fun main() {
 private fun String.toPassports() =
     split(BLANK_LINE)
         .map { p -> p.split(*SPACE_OR_NEWLINE).map { it.split(":") } }
-        .map { p -> p.associateBy({it[0]}, {it[1]}) }
+        .map { p -> p.associateBy({ it[0] }, { it[1] }) }
 
 private fun List<Map<String, String>>.filterHasRequiredFields() =
     filter { p -> listOf("byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid").all { it in p.keys } }

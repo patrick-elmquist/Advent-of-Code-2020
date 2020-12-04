@@ -22,10 +22,7 @@ fun main() {
     }
 }
 
-private fun traverse(
-    lines: List<String>,
-    slope: Pair<Int, Int>
-): Sequence<Int> {
+private fun traverse(lines: List<String>, slope: Pair<Int, Int>): Sequence<Int> {
     val input = lines.joinToString("")
     val cols = lines.first().length
     return generateSequence(0 to 0) { (previous, trees) ->
