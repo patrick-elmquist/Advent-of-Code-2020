@@ -1,20 +1,24 @@
 import common.Day
+import extension.BLANK_LINE
+import extension.NEW_LINE
+import extension.WHITESPACE
 
 // Answer #1: 213
 // Answer #2: 147
 
-private const val BLANK_LINE = "\n\n"
-private val SPACE_OR_NEWLINE = arrayOf(" ", "\n")
+private val SPACE_OR_NEWLINE = arrayOf(WHITESPACE, NEW_LINE)
 
 fun main() {
     Day(n = 4) {
         answer {
-            multiLine.toPassports()
+            lines.joinToString(NEW_LINE)
+                .toPassports()
                 .filterHasRequiredFields()
                 .count()
         }
         answer {
-            multiLine.toPassports()
+            lines.joinToString(NEW_LINE)
+                .toPassports()
                 .filterHasRequiredFields()
                 .filterHasValidFields()
                 .count()

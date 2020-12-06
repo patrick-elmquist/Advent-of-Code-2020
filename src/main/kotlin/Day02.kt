@@ -1,4 +1,5 @@
 import common.Day
+import extension.WHITESPACE
 import extension.split
 
 // Answer #1: 582
@@ -7,7 +8,7 @@ import extension.split
 fun main() {
     Day(n = 2) {
         answer {
-            lines.split(" ").count { split ->
+            lines.split(WHITESPACE).count { split ->
                 val minMax = split[0].split('-')
                 val range = minMax[0].toInt()..minMax[1].toInt()
                 val letter = split[1][0]
@@ -15,7 +16,7 @@ fun main() {
             }
         }
         answer {
-            lines.split(" ").count { split ->
+            lines.split(WHITESPACE).count { split ->
                 val index = split[0].split('-')
                 val indices = listOf(index[0].toInt() - 1, index[1].toInt() - 1)
                 val letter = split[1][0]
