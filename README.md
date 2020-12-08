@@ -1,5 +1,5 @@
 # Advent-of-Code-2020
 Solutions for Advent of Code 2020
 
-Completed: Day 1-7
+Completed: Day 1-8
 
