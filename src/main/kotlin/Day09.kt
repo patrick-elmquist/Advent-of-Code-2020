@@ -10,14 +10,13 @@ fun main() {
         }
         answer {
             val weakness = findWeakness(longs, n = 25)
-            longs.indices.findContiguousSet(longs, weakness)
-                .sorted()
-                .sumMinAndMax()
+            longs.findContiguousSet(weakness).sumMinAndMax()
         }
     }
 }
-private fun IntRange.findContiguousSet(data: List<Long>, weakness: Long) =
-    mapNotNull { index -> checkForContiguousSet(data, index, weakness) }.first()
+private fun List<Long>.findContiguousSet(weakness: Long) =
+    mapIndexedNotNull { index, _ -> checkForContiguousSet(this, index, weakness) }
+        .first()
 
 private fun List<Long>.sumMinAndMax() = sorted().let { it.first() + it.last() }
 
