@@ -33,13 +33,13 @@ private fun List<Int>.getSortedAdapters() =
 private fun List<Int>.createGroups(): List<List<Int>> {
     val list = mutableListOf<List<Int>>()
     var start = 0
-    (1 until this.size).forEach { index ->
-        if (this[index] - this[index - 1] > 1) {
-            list.add(this.subList(start, index))
+    (1 until size).forEach { index ->
+        if (get(index) - get(index - 1) > 1) {
+            list.add(subList(start, index))
             start = index
         }
     }
-    list.add(this.subList(start, this.size))
+    list.add(this.subList(start, size))
     return list
 }
 
