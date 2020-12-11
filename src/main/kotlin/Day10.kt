@@ -1,5 +1,4 @@
 import common.Day
-import kotlin.math.pow
 
 // Answer #1: 2310
 // Answer #2: 64793042714624
