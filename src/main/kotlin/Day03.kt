@@ -1,4 +1,5 @@
 import common.Day
+import extension.EMPTY_STRING
 
 // Answer #1: 216
 // Answer #2: 6708199680
@@ -23,7 +24,7 @@ fun main() {
 }
 
 private fun traverse(lines: List<String>, slope: Pair<Int, Int>): Sequence<Int> {
-    val input = lines.joinToString("")
+    val input = lines.joinToString(EMPTY_STRING)
     val cols = lines.first().length
     return generateSequence(0 to 0) { (previous, trees) ->
         val x = (previous + slope.first) % cols

@@ -14,6 +14,7 @@ fun main() {
         }
     }
 }
+
 private fun List<Long>.findContiguousSet(weakness: Long) =
     mapIndexedNotNull { index, _ -> checkForContiguousSet(this, index, weakness) }
         .first()
