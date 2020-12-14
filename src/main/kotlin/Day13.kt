@@ -1,6 +1,4 @@
 import common.Day
-import common.lcm
-import extension.NEW_LINE
 
 // Answer #1: 2305
 // Answer #2: 552612234243498
