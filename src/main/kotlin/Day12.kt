@@ -2,6 +2,7 @@ import common.CardinalDirection
 import common.CardinalDirection.*
 import common.Day
 import common.Point
+import common.manhattanDistance
 import kotlin.math.abs
 
 // Answer #1: 562
@@ -15,24 +16,23 @@ fun main() {
     Day(n = 12) {
         answer {
             lines.parseInstructions()
-                .fold(Point() to EAST) { (ship, dir), (c, n) ->
-                    when (c) {
-                        LEFT -> ship to dir.ccw(repeat = n / 90)
-                        RIGHT -> ship to dir.cw(repeat = n / 90)
+                .fold(Point() to EAST) { (ship, dir), (cmd, n) ->
+                    when (cmd) {
+                        LEFT, RIGHT -> ship to dir.rotate(cmd == RIGHT, repeat = n / 90)
                         FORWARD -> ship.moveInDirection(dir, n) to dir
-                        else -> ship.moveInDirection(c, n) to dir
+                        else -> ship.moveInDirection(cmd, n) to dir
                     }
-                }.let { (ship, _) -> abs(ship.x) + abs(ship.y) }
+                }.let { (ship, _) -> ship.manhattanDistance() }
         }
         answer {
             lines.parseInstructions()
-                .fold(Point() to Point(10, 1)) { (ship, waypoint), (c, n) ->
-                    when (c) {
-                        LEFT, RIGHT -> ship to waypoint.rotate(c, n)
+                .fold(Point() to Point(10, 1)) { (ship, waypoint), (cmd, n) ->
+                    when (cmd) {
+                        LEFT, RIGHT -> ship to waypoint.rotate(cmd, n)
                         FORWARD -> ship.moveForward(waypoint, n) to waypoint
-                        else -> ship to waypoint.moveInDirection(c, n)
+                        else -> ship to waypoint.moveInDirection(cmd, n)
                     }
-                }.let { (ship, _) -> abs(ship.x) + abs(ship.y) }
+                }.let { (ship, _) -> ship.manhattanDistance() }
         }
     }
 }

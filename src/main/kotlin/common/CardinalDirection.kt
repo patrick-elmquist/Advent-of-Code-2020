@@ -8,6 +8,9 @@ enum class CardinalDirection {
     SOUTH,
     WEST;
 
+    fun rotate(cw: Boolean, repeat: Int = 1) =
+        if(cw) cw(repeat) else ccw(repeat)
+
     fun cw(repeat: Int = 1) =
         (0 until repeat).fold(this) { current, _ ->
             when (current) {

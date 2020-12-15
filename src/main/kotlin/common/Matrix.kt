@@ -7,15 +7,11 @@ const val UP = -1
 const val DOWN = 1
 
 typealias Matrix<T> = List<List<T>>
-typealias MutableMatrix<T> = List<MutableList<T>>
 
 fun <T : CharSequence> List<T>.toMatrix() = map { it.toList() }
 operator fun <T> Matrix<T>.get(point: Point) = get(point.x, point.y)
 operator fun <T> Matrix<T>.get(x: Int, y: Int) = this[y][x]
 operator fun <T> Matrix<T>.contains(point: Point) = point.x in first().indices && point.y in indices
-
-fun <T : CharSequence> List<T>.toMutableMatrix() = map { it.toMutableList() }
-operator fun <T> MutableMatrix<T>.set(x: Int, y: Int, value: T) = value.also { this[y][x] = value }
 
 fun <E, T> Matrix<T>.mapGrid(block: (point: Point, value: T) -> E): Matrix<E> =
     mapIndexed { y, list -> list.mapIndexed { x, value -> block(Point(x, y), value) } }

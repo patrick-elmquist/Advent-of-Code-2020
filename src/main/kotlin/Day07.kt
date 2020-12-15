@@ -34,26 +34,24 @@ private fun calculateBagCount(graph: Map<String, MutableMap<String, Int>>, color
 private fun List<String>.toBagGraph() =
     filter { "no other" !in it }
         .fold(mutableMapOf<String, MutableMap<String, Int>>()) { bags, line ->
-            bags.apply {
-                val color = line.getColor()
-                val bag = getOrPut(color) { mutableMapOf() }
-                line.getBags().forEach { (otherColor, count) ->
-                    getOrPut(otherColor) { mutableMapOf() }
-                    bag[otherColor] = count
-                }
+            val color = line.getColor()
+            val bag = bags.getOrPut(color) { mutableMapOf() }
+            line.getBags().forEach { (otherColor, count) ->
+                bags.getOrPut(otherColor) { mutableMapOf() }
+                bag[otherColor] = count
             }
+            return@fold bags
         }
 
 private fun List<String>.toReversedBagGraph() =
     filter { "no other" !in it }
         .fold(mutableMapOf<String, MutableSet<String>>()) { bags, line ->
-            bags.apply {
-                val color = line.getColor()
-                putIfAbsent(color, mutableSetOf())
-                line.getBags().forEach { (otherColor, _) ->
-                    getOrPut(otherColor, { mutableSetOf() }).also { bag -> bag.add(color) }
-                }
+            val color = line.getColor()
+            bags.putIfAbsent(color, mutableSetOf())
+            line.getBags().forEach { (otherColor, _) ->
+                bags.getOrPut(otherColor, { mutableSetOf() }).add(color)
             }
+            return@fold bags
         }
 
 private fun String.getColor() = split(WHITESPACE).take(2).joinToString(WHITESPACE)
