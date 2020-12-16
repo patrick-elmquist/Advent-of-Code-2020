@@ -1,5 +1,6 @@
 import common.Day
 import extension.CSV
+import extension.matchAndDestruct
 import extension.splitOnBlank
 import extension.toInts
 
@@ -36,10 +37,10 @@ private fun filterValidTickets(tickets: List<List<Int>>, ranges: List<IntRange>)
 
 private fun parseConditions(lines: List<String>): Map<String, List<IntRange>> =
     lines.map {
-            CONDITION_REGEX.matchEntire(it)?.destructured?.let { (name, s1, e1, s2, e2) ->
-                name to listOf(s1.toInt()..e1.toInt(), s2.toInt()..e2.toInt())
-            } ?: error("")
-        }.toMap()
+        CONDITION_REGEX.matchAndDestruct(it).let { (name, s1, e1, s2, e2) ->
+            name to listOf(s1.toInt()..e1.toInt(), s2.toInt()..e2.toInt())
+        }
+    }.toMap()
 
 private fun solve2(tickets: List<List<Int>>, myTicket: List<Int>, conditions: Map<String, List<IntRange>>): Long {
     val matchingConditions = tickets.first().indices.map { index ->
@@ -66,8 +67,6 @@ private fun solve2(tickets: List<List<Int>>, myTicket: List<Int>, conditions: Ma
 private fun findMatchingConditions(
     conditions: Map<String, List<IntRange>>,
     column: List<Int>
-): MutableMap<String, List<IntRange>> {
-    return conditions.filterValues { ranges ->
-        column.all { field -> ranges.any { range -> field in range } }
-    }.toMutableMap()
-}
+) = conditions.filterValues { ranges ->
+    column.all { field -> ranges.any { range -> field in range } }
+}.toMutableMap()
