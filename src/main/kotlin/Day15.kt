@@ -1,4 +1,5 @@
 import common.Day
+import extension.CSV
 import extension.toInts
 
 // Answer #1: 929
@@ -7,12 +8,12 @@ import extension.toInts
 fun main() {
     Day(n = 15) {
         answer {
-            val numbers = lines.first().split(',').toInts()
+            val numbers = lines.first().split(CSV).toInts()
             findNthNumber(numbers, 2020)
         }
 
         answer {
-            val numbers = lines.first().split(',').toInts()
+            val numbers = lines.first().split(CSV).toInts()
             findNthNumber(numbers, 30000000)
         }
     }

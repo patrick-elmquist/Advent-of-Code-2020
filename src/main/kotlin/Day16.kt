@@ -1,6 +1,6 @@
 import common.Day
 import extension.CSV
-import extension.matchAndDestruct
+import extension.match
 import extension.splitOnBlank
 import extension.toInts
 
@@ -13,21 +13,25 @@ fun main() {
     Day(n = 16) {
         answer {
             val split = lines.splitOnBlank()
-            val conditions = parseConditions(split[0])
-            val tickets = split[2].drop(1).map { it.split(CSV).toInts() }
-            val ranges = conditions.values.flatten()
+            val ranges = split[0].toConditions().values.flatten()
 
-            tickets.map { it.filter { n -> ranges.all { n !in it } }.sum() }.sum()
+            split[2].drop(1)
+                .toTickets()
+                .map { it.filter { n -> ranges.all { range -> n !in range } }.sum() }
+                .sum()
         }
 
         answer {
             val split = lines.splitOnBlank()
-            val conditions = parseConditions(split[0])
-            val myTicket = split[1].drop(1).first().split(CSV).toInts()
-            val tickets = split[2].drop(1).map { it.split(CSV).toInts() }
+            val conditions = split[0].toConditions()
+            val myTicket = split[1].drop(1).toTickets().first()
+            val tickets = split[2].drop(1).toTickets()
             val ranges = conditions.values.flatten()
+            val validTickets = filterValidTickets(tickets, ranges)
 
-            solve2(filterValidTickets(tickets, ranges), myTicket, conditions)
+            findNameToColumnMap(validTickets, conditions)
+                .getDepartureValuesForTicket(myTicket)
+                .reduce { acc, i -> acc * i }
         }
     }
 }
@@ -35,38 +39,43 @@ fun main() {
 private fun filterValidTickets(tickets: List<List<Int>>, ranges: List<IntRange>) =
     tickets.filter { ticket -> ticket.all { number -> ranges.any { range -> number in range } } }
 
-private fun parseConditions(lines: List<String>): Map<String, List<IntRange>> =
-    lines.map {
-        CONDITION_REGEX.matchAndDestruct(it).let { (name, s1, e1, s2, e2) ->
-            name to listOf(s1.toInt()..e1.toInt(), s2.toInt()..e2.toInt())
+private fun List<String>.toConditions(): Map<String, List<IntRange>> =
+    map { it.toCondition() }.toMap()
+
+private fun Map<String, Int>.getDepartureValuesForTicket(myTicket: List<Int>) =
+    filterKeys { it.contains("departure") }.values.map { myTicket[it].toLong() }
+
+private fun List<String>.toTickets() = map { it.split(CSV).toInts() }
+private fun String.toCondition() =
+    CONDITION_REGEX
+        .match(this) { (name, s1, e1, s2, e2) ->
+            name to listOf(
+                s1.toInt()..e1.toInt(),
+                s2.toInt()..e2.toInt()
+            )
         }
-    }.toMap()
 
-private fun solve2(tickets: List<List<Int>>, myTicket: List<Int>, conditions: Map<String, List<IntRange>>): Long {
-    val matchingConditions = tickets.first().indices.map { index ->
-        index to findMatchingConditions(conditions, tickets.map { it[index] })
-    }.toMutableList()
+private fun findNameToColumnMap(tickets: List<List<Int>>, conditions: Map<String, List<IntRange>>): Map<String, Int> {
+    val matchingConditions = tickets.first().indices
+        .map { i -> i to findMatchingConditions(conditions, tickets, i) }
+        .toMutableList()
 
-    val s = mutableMapOf<Int, String>()
+    val columnToNameMap = mutableMapOf<String, Int>()
     while (matchingConditions.isNotEmpty()) {
-        val entry = matchingConditions.minByOrNull { (_, conditions) -> conditions.size } ?: error("")
-        if (entry.second.isEmpty()) error("not possible")
+        val entry = matchingConditions.minByOrNull { (_, conditions) -> conditions.size }
+            ?: error("")
 
         val condition = entry.second.keys.first()
-        matchingConditions.remove(entry)
-        matchingConditions.forEach {
-            it.second.remove(condition)
-        }
-        s[entry.first] = condition
+        matchingConditions.apply { remove(entry) }
+            .forEach { (_, conditions) -> conditions.remove(condition) }
+
+        columnToNameMap[condition] = entry.first
     }
-    return s.filterValues { it.contains("departure") }
-        .map { myTicket[it.key].toLong() }
-        .reduce { acc, i -> acc * i }
+    return columnToNameMap
 }
 
-private fun findMatchingConditions(
-    conditions: Map<String, List<IntRange>>,
-    column: List<Int>
-) = conditions.filterValues { ranges ->
-    column.all { field -> ranges.any { range -> field in range } }
-}.toMutableMap()
+private fun List<List<Int>>.getColumn(index: Int) = map { it[index] }
+private fun findMatchingConditions(conditions: Map<String, List<IntRange>>, tickets: List<List<Int>>, index: Int) =
+    conditions.filterValues { ranges ->
+        tickets.getColumn(index).all { field -> ranges.any { range -> field in range } }
+    }.toMutableMap()

@@ -1,26 +1,29 @@
 import common.Day
-import extension.WHITESPACE
-import extension.split
+import extension.match
 
 // Answer #1: 582
 // Answer #2: 729
 
+private val REGEX = "([0-9]+)-([0-9]+) ([a-z]): ([a-z]+)".toRegex()
+
 fun main() {
     Day(n = 2) {
         answer {
-            lines.split(WHITESPACE).count { split ->
-                val minMax = split[0].split('-')
-                val range = minMax[0].toInt()..minMax[1].toInt()
-                val letter = split[1][0]
-                split[2].count { it == letter } in range
+            lines.count { line ->
+                REGEX.match(line) { (min, max, c, s) ->
+                    val letter = c.first()
+                    val minMax = min.toInt()..max.toInt()
+                    s.count { it == letter } in minMax
+                }
             }
         }
         answer {
-            lines.split(WHITESPACE).count { split ->
-                val index = split[0].split('-')
-                val indices = listOf(index[0].toInt() - 1, index[1].toInt() - 1)
-                val letter = split[1][0]
-                indices.count { split[2][it] == letter } == 1
+            lines.count { line ->
+                REGEX.match(line) { (i1, i2, c, s) ->
+                    val letter = c.first()
+                    val indices = listOf(i1.toInt(), i2.toInt())
+                    indices.count { s[it - 1] == letter } == 1
+                }
             }
         }
     }
