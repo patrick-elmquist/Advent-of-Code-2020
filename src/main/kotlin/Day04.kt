@@ -1,23 +1,20 @@
 import common.Day
-import extension.BLANK_LINE
-import extension.NEW_LINE
 import extension.WHITESPACE
+import extension.splitOnBlank
 
 // Answer #1: 213
 // Answer #2: 147
 
-private val SPACE_OR_NEWLINE = arrayOf(WHITESPACE, NEW_LINE)
-
 fun main() {
     Day(n = 4) {
         answer {
-            lines.joinToString(NEW_LINE)
+            lines.splitOnBlank()
                 .toPassports()
                 .filterHasRequiredFields()
                 .count()
         }
         answer {
-            lines.joinToString(NEW_LINE)
+            lines.splitOnBlank()
                 .toPassports()
                 .filterHasRequiredFields()
                 .filterHasValidFields()
@@ -26,9 +23,9 @@ fun main() {
     }
 }
 
-private fun String.toPassports() =
-    split(BLANK_LINE)
-        .map { p -> p.split(*SPACE_OR_NEWLINE).map { it.split(":") } }
+private fun List<List<String>>.toPassports() =
+    map { it.joinToString(WHITESPACE) }
+        .map { p -> p.split(WHITESPACE).map { it.split(":") } }
         .map { p -> p.associateBy({ it[0] }, { it[1] }) }
 
 private fun List<Map<String, String>>.filterHasRequiredFields() =

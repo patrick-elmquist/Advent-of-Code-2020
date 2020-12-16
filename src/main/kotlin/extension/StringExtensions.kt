@@ -1,4 +1,4 @@
 package extension
 
-fun String.joinToSingleLine() = replace(NEW_LINE, EMPTY_STRING)
+fun String.joinToSingleLine(separator: String = EMPTY_STRING) = replace(NEW_LINE, separator)
 
