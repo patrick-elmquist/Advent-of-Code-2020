@@ -1,4 +1,5 @@
 import common.Day
+import extension.CSV
 
 // Answer #1: 2305
 // Answer #2: 552612234243498
@@ -7,15 +8,14 @@ fun main() {
     Day(n = 13) {
         answer {
             val timestamp = lines.first().toInt()
-            lines.drop(1).first().split(",")
+            lines.drop(1).first().split(CSV)
                 .mapNotNull { it.toIntOrNull() }
                 .map { it to (timestamp / it + 1) * it - timestamp }
                 .minByOrNull { it.second }
                 ?.let { (n, m) -> n * m }
         }
         answer {
-            val map = lines.drop(1).first()
-                .split(",")
+            val map = lines.drop(1).first().split(CSV)
                 .mapIndexedNotNull { index, c -> if (c != "x") index.toLong() to c.toLong() else null }
 
             map.drop(1)

@@ -1,4 +1,5 @@
 import common.Day
+import extension.COLON
 import extension.WHITESPACE
 import extension.splitOnBlank
 
@@ -25,7 +26,7 @@ fun main() {
 
 private fun List<List<String>>.toPassports() =
     map { it.joinToString(WHITESPACE) }
-        .map { p -> p.split(WHITESPACE).map { it.split(":") } }
+        .map { p -> p.split(WHITESPACE).map { it.split(COLON) } }
         .map { p -> p.associateBy({ it[0] }, { it[1] }) }
 
 private fun List<Map<String, String>>.filterHasRequiredFields() =

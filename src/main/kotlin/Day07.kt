@@ -57,7 +57,7 @@ private fun List<String>.toReversedBagGraph() =
 private fun String.getColor() = split(WHITESPACE).take(2).joinToString(WHITESPACE)
 private fun String.getBags(): Map<String, Int> {
     val i = indexOfFirst { it.isDigit() }
-    val others = drop(i).split(", ").split(WHITESPACE)
+    val others = drop(i).split(", ").mapSplit(WHITESPACE)
     return others.map {
         it.drop(1).take(2).joinToString(WHITESPACE) to it.first().toInt()
     }.toMap()
