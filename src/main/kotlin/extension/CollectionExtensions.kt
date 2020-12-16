@@ -9,15 +9,11 @@ fun <E, T : Collection<E>> T.printAll(): T = onEach { println(it) }
 fun <T : Collection<String>> T.mapSplit(separator: String = " ") =
     map { it.split(separator) }
 
-fun <E : CharSequence, T : List<E>> T.splitOnBlank(): List<List<E>> {
-    indices.filter {
-        get(it).isNotEmpty()
-    }
-    val blanks = mapIndexedNotNull { index, n ->
-        if (n.isEmpty()) index else null
-    } + listOf(size)
+fun <E : CharSequence, T : List<E>> T.splitOnBlank() =
+    (indices.filter { get(it).isEmpty() } + listOf(size))
+        .fold(mutableListOf<List<E>>() to 0) { (list, start), end ->
+            list.add(subList(start, end))
+            list to end + 1
+        }.first
 
-    return blanks.fold(mutableListOf<List<E>>() to 0) { (list, start), end ->
-        list.also { it.add(subList(start, end)) } to end + 1
-    }.first
-}
+
