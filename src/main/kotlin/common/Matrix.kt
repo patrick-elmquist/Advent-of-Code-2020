@@ -16,6 +16,9 @@ operator fun <T> Matrix<T>.contains(point: Point) = point.x in first().indices &
 fun <E, T> Matrix<T>.mapGrid(block: (point: Point, value: T) -> E): Matrix<E> =
     mapIndexed { y, list -> list.mapIndexed { x, value -> block(Point(x, y), value) } }
 
+fun <E, T> Matrix<T>.mapGridNotNull(block: (point: Point, value: T) -> E?): Matrix<E> =
+    mapIndexed { y, list -> list.mapIndexedNotNull { x, value -> block(Point(x, y), value) } }
+
 fun <T> Matrix<T>.findInDirection(
     point: Point,
     directionX: Int,

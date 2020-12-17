@@ -9,6 +9,12 @@ fun <E, T : Collection<E>> T.printAll(): T = onEach { println(it) }
 fun <T : Collection<String>> T.mapSplit(separator: String = " ") =
     map { it.split(separator) }
 
+fun <T> Collection<T>.max(selector: T.() -> Int) =
+    maxByOrNull { selector(it) } ?: error("null when finding max")
+
+fun <T> Collection<T>.min(selector: T.() -> Int) =
+    minByOrNull { selector(it) } ?: error("null when finding min")
+
 fun <E : CharSequence, T : List<E>> T.splitOnBlank() =
     (indices.filter { get(it).isEmpty() } + listOf(size))
         .fold(mutableListOf<List<E>>() to 0) { (list, start), end ->
