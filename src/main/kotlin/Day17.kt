@@ -2,33 +2,27 @@ import common.Day
 import common.Point4D
 import common.mapGridNotNull
 import common.toMatrix
-import extension.max
-import extension.min
+import extension.*
 
 // Answer #1: 362
 // Answer #2: 1980
 
-private const val CYCLES = 6
 private val NEIGHBOUR_RANGE = -1..1
 private val DEACTIVATE_RANGE = 2..3
 
 fun main() {
     Day(n = 17) {
         answer {
-            var map = lines.toActiveSet()
-            repeat(CYCLES) { map = map.cycle() }
-            map.size
+            loop(n = 6, initial = lines.parseActive()) { it.cycle() }.size
         }
 
         answer {
-            var map = lines.toActiveSet()
-            repeat(CYCLES) { map = map.cycle(include4D = true) }
-            map.size
+            loop(n = 6, initial = lines.parseActive()) { it.cycle(include4D = true) }.size
         }
     }
 }
 
-private fun List<String>.toActiveSet() =
+private fun List<String>.parseActive() =
     toMatrix()
         .mapGridNotNull { point, value -> if (value == '#') Point4D(point) else null }
         .flatten()
