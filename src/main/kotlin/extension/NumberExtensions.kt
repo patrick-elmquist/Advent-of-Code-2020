@@ -18,5 +18,7 @@ fun Long.set(index: Int, bit: Int): Long {
     }
 }
 
+fun Char.asNumber() = Character.getNumericValue(this)
+
 
 
