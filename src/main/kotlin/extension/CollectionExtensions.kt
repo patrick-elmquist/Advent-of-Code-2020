@@ -20,7 +20,7 @@ fun <E : CharSequence, T : List<E>> T.splitOnBlank() =
         .fold(mutableListOf<List<E>>() to 0) { (list, start), end ->
             list.add(subList(start, end))
             list to end + 1
-        }.first
+        }.first.toList()
 
 fun IntRange.permutations() = toList().permutations()
 fun <T> List<T>.permutations(): Set<List<T>> = when {

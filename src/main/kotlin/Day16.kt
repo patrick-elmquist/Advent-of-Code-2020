@@ -12,20 +12,20 @@ private val CONDITION_REGEX = "(^[^:]*): ([0-9]{1,3})-([0-9]{1,3}) or ([0-9]{1,3
 fun main() {
     Day(n = 16) {
         answer {
-            val split = lines.splitOnBlank()
-            val ranges = split[0].toConditions().values.flatten()
+            val (rules, _, tickets) = lines.splitOnBlank()
+            val ranges = rules.toConditions().values.flatten()
 
-            split[2].drop(1)
+            tickets.drop(1)
                 .toTickets()
                 .map { it.filter { n -> ranges.all { range -> n !in range } }.sum() }
                 .sum()
         }
 
         answer {
-            val split = lines.splitOnBlank()
-            val conditions = split[0].toConditions()
-            val myTicket = split[1].drop(1).toTickets().first()
-            val tickets = split[2].drop(1).toTickets()
+            val (rules, my, otherTickets) = lines.splitOnBlank()
+            val conditions = rules.toConditions()
+            val myTicket = my.drop(1).toTickets().first()
+            val tickets = otherTickets.drop(1).toTickets()
             val ranges = conditions.values.flatten()
             val validTickets = filterValidTickets(tickets, ranges)
 
