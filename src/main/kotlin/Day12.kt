@@ -1,9 +1,8 @@
-import common.CardinalDirection
-import common.CardinalDirection.*
+import common.Direction
+import common.Direction.*
 import common.Day
 import common.Point
 import common.manhattanDistance
-import kotlin.math.abs
 
 // Answer #1: 562
 // Answer #2: 101860
@@ -52,9 +51,9 @@ private fun Point.rotate(c: Char, n: Int) =
     }
 
 private fun Point.moveInDirection(c: Char, n: Int) =
-    moveInDirection(CardinalDirection.from(c), n)
+    moveInDirection(Direction.from(c), n)
 
-private fun Point.moveInDirection(dir: CardinalDirection, n: Int) =
+private fun Point.moveInDirection(dir: Direction, n: Int) =
     when (dir) {
         NORTH -> copy(y = y + n)
         SOUTH -> copy(y = y - n)

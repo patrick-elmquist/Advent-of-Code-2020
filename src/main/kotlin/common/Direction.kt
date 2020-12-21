@@ -2,7 +2,7 @@ package common
 
 import java.lang.IllegalArgumentException
 
-enum class CardinalDirection {
+enum class Direction {
     NORTH,
     EAST,
     SOUTH,
