@@ -7,9 +7,10 @@ import extension.splitOnBlank
 fun main() {
     Day(n = 20) {
         answer {
-            val tiles = lines.splitOnBlank().map { it.toTile() }.toMap()
-            val cornerTiles = tiles.findCornerTiles()
-            cornerTiles.fold(1L) { acc, name -> acc * name.toLong() }
+            lines.splitOnBlank()
+                .toTileMap()
+                .filterCornerTiles()
+                .fold(1L) { acc, name -> acc * name.toLong() }
         }
 
         answer {
@@ -18,29 +19,22 @@ fun main() {
     }
 }
 
-private fun Map<String, List<String>>.findCornerTiles(): List<String> {
-    val edgeCount = values
-        .flatten()
-        .groupingBy { it }
-        .eachCount()
-
+private fun Map<String, List<String>>.filterCornerTiles(): List<String> {
+    val edgeCount = values.flatten().groupingBy { it }.eachCount()
     return map { (name, edges) -> name to edges.count { edgeCount[it] == 1 } }
-        .filter { (_, count) -> count == 4 }
-        .map { (name, _) -> name }
+        .filter { it.second == 4 }
+        .map { it.first }
 }
 
+private fun List<List<String>>.toTileMap() = map { it.toTile() }.toMap()
 private fun List<String>.toTile(): Pair<String, List<String>> {
     val sides = with(drop(1)) {
-        mutableListOf<String>(
+        mutableListOf(
             first(),
             map { it.last() }.joinToString(""),
             last().reversed(),
-            map { it.first() }.joinToString("").reversed(),
-            first().reversed(),
-            map { it.last() }.joinToString("").reversed(),
-            last(),
-            map { it.first() }.joinToString("")
+            map { it.first() }.joinToString("").reversed()
         )
     }
-    return first().split(" ")[1].dropLast(1) to sides
+    return first().split(" ")[1].dropLast(1) to (sides + sides.map { it.reversed() })
 }
