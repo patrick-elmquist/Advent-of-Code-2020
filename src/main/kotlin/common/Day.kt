@@ -1,9 +1,9 @@
 package common
 
-import extension.toFloats
 import extension.toInts
 import extension.toLongs
 import java.io.File
+import kotlin.system.measureTimeMillis
 
 class Day(private val input: Input, block: Day.() -> Unit) {
     private var answerCount: Int = 1
@@ -19,11 +19,21 @@ class Day(private val input: Input, block: Day.() -> Unit) {
     fun answer(vararg input: String, block: Input.() -> Any?) = answer(Input(*input), block)
     fun answer(input: List<String>, block: Input.() -> Any?) = answer(Input(input), block)
 
-    private fun answer(input: Input, block: Input.() -> Any?) = println("Answer #${answerCount}: ${ block(input) }")
+    private fun answer(input: Input, block: Input.() -> Any?) {
+        var result: Any?
+        val elapsed = measureTimeMillis {
+            result = block(input.copy())
+        }
+        println("Answer #${answerCount}: $result (${elapsed}ms)")
+    }
 }
 
-class Input(val lines: List<String>) {
-    val floats by lazy { lines.toFloats() }
+data class Input(private var _lines: List<String>) {
+    val lines: List<String> get() = test?.takeIf { !ignoreTest }?.split("\n") ?: _lines
+
+    var test: String? = null
+    var ignoreTest: Boolean = false
+
     val ints by lazy { lines.toInts() }
     val longs by lazy { lines.toLongs() }
 
