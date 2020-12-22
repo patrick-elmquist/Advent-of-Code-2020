@@ -15,6 +15,10 @@ fun <T> Collection<T>.max(selector: T.() -> Int) =
 fun <T> Collection<T>.min(selector: T.() -> Int) =
     minByOrNull { selector(it) } ?: error("null when finding min")
 
+fun <T> MutableCollection<T>.addVararg(vararg rest: T) {
+    this.addAll(rest)
+}
+
 fun <E : CharSequence, T : List<E>> T.splitOnBlank() =
     (indices.filter { get(it).isEmpty() } + listOf(size))
         .fold(mutableListOf<List<E>>() to 0) { (list, start), end ->
