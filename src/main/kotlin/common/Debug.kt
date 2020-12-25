@@ -2,7 +2,8 @@
 
 package common
 
-private const val ENABLED = false
+private const val ENABLED = true
+
 fun <T> T.print(prefix: String = "") = this.apply {
     if (ENABLED) println("$prefix $this")
 }
