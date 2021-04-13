@@ -17,12 +17,12 @@ fun main() {
                 1 to 2
             )
             slopes.map { slope -> traverse(lines, slope).last() }
-                .fold(1L) { a, b -> a * b }
+                .reduce { a, b -> a * b }
         }
     }
 }
 
-private fun traverse(lines: List<String>, slope: Pair<Int, Int>): Sequence<Int> {
+private fun traverse(lines: List<String>, slope: Pair<Int, Int>): Sequence<Long> {
     val input = lines.joinToString("")
     val cols = lines.first().length
     return generateSequence(0 to 0) { (previous, trees) ->
@@ -34,5 +34,5 @@ private fun traverse(lines: List<String>, slope: Pair<Int, Int>): Sequence<Int> 
             input[next] == '#' -> trees + 1
             else -> trees
         }
-    }.map { it.second }
+    }.map { it.second.toLong() }
 }
